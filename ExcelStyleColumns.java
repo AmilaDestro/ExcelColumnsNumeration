@@ -1,3 +1,5 @@
+package ua.khpi.azarenko.task01;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,31 +32,15 @@ public class ExcelStyleColumns {
             sb.append('Z');
             quotient = (number - 1) / 26;
         } else {
-            for (Map.Entry<Character, Integer> pair: alphabet.entrySet()) {
-                if (pair.getValue().equals(modulo)) {
-                    sb.append(pair.getKey());
-                }
-            }
+            sb.append(findSymbol(modulo));
         }
         if (quotient <= 26) {
-            for (Map.Entry<Character, Integer> pair: alphabet.entrySet()) {
-                if (pair.getValue().equals(quotient)) {
-                    sb.append(pair.getKey());
-                }
-            }
+            sb.append(findSymbol(quotient));
         } else {
             quotient = quotient / 26;
             modulo = quotient % 26;
-            for (Map.Entry<Character, Integer> pair: alphabet.entrySet()) {
-                if (pair.getValue().equals(modulo)) {
-                    sb.append(pair.getKey());
-                }
-            }
-            for (Map.Entry<Character, Integer> pair: alphabet.entrySet()) {
-                if (pair.getValue().equals(quotient)) {
-                    sb.append(pair.getKey());
-                }
-            }
+            sb.append(findSymbol(modulo));
+            sb.append(findSymbol(quotient));
         }
         char[] obtainedChars = sb.toString().toCharArray();
         StringBuilder reverseSb = new StringBuilder();
@@ -64,20 +50,29 @@ public class ExcelStyleColumns {
         return reverseSb.toString();
     }
 
+    private static char findSymbol(int value) {
+        char symbol = '\u0000';
+        for (Map.Entry<Character, Integer> pair: alphabet.entrySet()) {
+            if (pair.getValue().equals(value)) {
+                symbol = pair.getKey();
+            }
+        }
+        return symbol;
+    }
+
     private static String rightColumn(String number) {
         int digitView = chars2digits(number);
         digitView += 1;
-        String result = digits2chars(digitView);
-        return result;
+        return digits2chars(digitView);
     }
 
     public static void main(String[] args) {
         if (args.length != 3) {
             System.out.println("You should specify 3 program parameters");
         } else {
-            System.out.println(chars2digits(args[0]));
-            System.out.println(digits2chars(Integer.parseInt(args[1])));
-            System.out.println(rightColumn(args[2]));
+            System.out.println(args[0] + " ==> " + chars2digits(args[0]));
+            System.out.println(args[1] + " ==> " + digits2chars(Integer.parseInt(args[1])));
+            System.out.println("Next column of " + args[2] + " ==> " + rightColumn(args[2]));
         }
     }
 }
